@@ -52,7 +52,7 @@ BZ_PLUGIN(MutePersist)
 
 const char* MutePersist::Name ()
 {
-    return "Mute Persist";
+    return "Persistent Mutes";
 }
 
 void MutePersist::Init (const char* config)
@@ -104,7 +104,28 @@ void MutePersist::Event (bz_EventData* eventData)
 
 bool MutePersist::SlashCommand (int playerID, bz_ApiString command, bz_ApiString /*message*/, bz_APIStringList *params)
 {
-    if (!bz_hasPerm(playerID, "mute") || params->size() != 1)
+    if (!bz_hasPerm(playerID, "mute"))
+    {
+        return false;
+    }
+
+    if (command == "mutelist")
+    {
+        bz_sendTextMessage(BZ_SERVER, playerID, "Persistent Mute Rules");
+        bz_sendTextMessage(BZ_SERVER, playerID, "---------------------");
+
+        for (auto entry : mutes)
+        {
+            bz_sendTextMessagef(BZ_SERVER, playerID, "%s (%s) muted by %s", entry.second.callsign.c_str(), entry.second.ipAddress.c_str(), entry.second.muter.c_str());
+            bz_sendTextMessagef(BZ_SERVER, playerID, "  %.0f minutes remaining", (std::max(0.0, (entry.second.expiration - bz_getCurrentTime())) / 60));
+        }
+
+        bz_sendTextMessagef(BZ_SERVER, playerID, "");
+
+        return false;
+    }
+
+    if (params->size() != 1)
     {
         return false;
     }
@@ -123,16 +144,6 @@ bool MutePersist::SlashCommand (int playerID, bz_ApiString command, bz_ApiString
 
         mutes[pr->ipAddress] = _mute;
     }
-    else if (command == "mutelist")
-    {
-        for (auto entry : mutes)
-        {
-            bz_sendTextMessagef(BZ_SERVER, playerID, "%s (%s) muted by %s", entry.second.callsign.c_str(), entry.second.ipAddress.c_str(), entry.second.muter.c_str());
-            bz_sendTextMessagef(BZ_SERVER, playerID, "  %d minutes remaining", (std::max(0.0, (entry.second.expiration - bz_getCurrentTime())) / 60));
-        }
-
-        bz_sendTextMessagef(BZ_SERVER, playerID, "");
-    }
     else if (command == "unmute")
     {
         if (pr && mutes.find(pr->ipAddress) != mutes.end())
@@ -145,7 +156,7 @@ bool MutePersist::SlashCommand (int playerID, bz_ApiString command, bz_ApiString
 
             for (auto entry : mutes)
             {
-                if (entry.second.bzID == target || entry.second.callsign == target || entry.second.ipAddress == target)
+                if (entry.second.callsign == target || entry.second.ipAddress == target)
                 {
                     mutes.erase(entry.second.ipAddress);
                     bz_sendTextMessagef(BZ_SERVER, playerID, "%s has been removed from the mute list", entry.second.callsign.c_str());
