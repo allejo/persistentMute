@@ -20,7 +20,7 @@
  THE SOFTWARE.
  */
 
-#include <algorithm>
+#include <memory>
 
 #include "bzfsAPI.h"
 #include "plugin_utils.h"
@@ -55,7 +55,7 @@ const char* MutePersist::Name ()
     return "Persistent Mutes";
 }
 
-void MutePersist::Init (const char* config)
+void MutePersist::Init (const char* /*config*/)
 {
     Register(bz_ePlayerJoinEvent);
 
