@@ -152,7 +152,7 @@ bool MutePersist::SlashCommand (int playerID, bz_ApiString command, bz_ApiString
         }
         else
         {
-            std::string target = params->get(1);
+            std::string target = params->get(0);
 
             for (auto entry : mutes)
             {
