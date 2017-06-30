@@ -1,6 +1,6 @@
 # Persistent Mutes
 
-[![GitHub release](https://img.shields.io/github/release/allejo/persistentMute.svg?maxAge=2592000)](https://github.com/allejo/persistentMute/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/allejo/persistentMute.svg)](https://github.com/allejo/persistentMute/releases/latest)
 ![Minimum BZFlag Version](https://img.shields.io/badge/BZFlag-v2.4.12+-blue.svg)
 [![License](https://img.shields.io/github/license/allejo/persistentMute.svg)](https://github.com/allejo/persistentMute/blob/master/LICENSE.md)
 
