@@ -10,7 +10,7 @@ AM_CFLAGS = $(CONF_CFLAGS)
 AM_CXXFLAGS = $(CONF_CXXFLAGS)
 
 EXTRA_DIST = \
-	README.persistentMute.txt \
+	LICENSE.md \
 	README.md \
 	persistentMute.def \
 	persistentMute.sln \
